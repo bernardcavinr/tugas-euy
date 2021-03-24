@@ -1,0 +1,33 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def data(f,k):
+    data = np.genfromtxt(f, delimiter='\t')
+    databaru = []
+    for i in data[:38, k]:
+        if not np.isnan(i):
+            databaru.append(i)
+    return databaru
+
+d_poro = data('34-29b.dat', 3)
+
+def var(data):
+    gamma = []
+    lag = []
+    for d in range(1, len(data)):
+        sum = 0
+        n = 0
+        for i in range(0, len(data)):
+            try:
+                sum += (data[i] - data[i + d]) ** 2
+                n += 1
+            except:
+                pass
+        lag.append(d)
+        gamma.append(sum * (1 / (2 * n)))
+    return lag, gamma
+
+x,y = var(d_poro)
+plt.plot(x,y)
+plt.scatter(x,y)
+plt.show()
